@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects & Certificates - Albert M. Gerona</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #030712;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Entrance Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navigation */
+        .top-nav {
+            background: #030712;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #1f2937;
+        }
+        .nav-container { max-width: 800px; margin: 0 auto; padding: 0 10px; }
+        .nav-menu { display: flex; list-style: none; justify-content: center; }
+        .nav-menu a { padding: 15px 20px; text-decoration: none; color: #ffffff; transition: 0.3s; }
+        .nav-menu a.active { color: #22d3ee; }
+
+        .main-content { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 60px 20px; 
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        h1 { font-size: 2.5rem; text-align: center; margin-bottom: 50px; }
+        h1 span { color: #22d3ee; }
+
+        h2 { 
+            color: #22d3ee; 
+            font-size: 1.6rem; 
+            margin: 50px 0 20px; 
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        h2::after { content: ""; flex: 1; height: 1px; background: #1f2937; }
+
+        /* Work Grid */
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .work-card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+        .work-card:hover { 
+            border-color: #22d3ee; 
+            transform: translateY(-5px); 
+            background: #1a2233;
+        }
+
+        .site-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(34, 211, 238, 0.1);
+            color: #22d3ee;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            transition: 0.3s;
+            width: fit-content;
+            margin-top: 15px;
+        }
+        .site-link:hover { background: #22d3ee; color: #030712; }
+
+        /* Certificates Gallery */
+        .gallery-container {
+            position: relative;
+            max-width: 650px;
+            margin: 0 auto;
+            background: #111827;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #1f2937;
+        }
+
+        .cert-slide { display: none; text-align: center; }
+        
+        .img-container { 
+            width: 100%; 
+            background: #000; 
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            overflow: hidden;
+        }
+        
+        .img-container img { 
+            max-width: 100%; 
+            max-height: 100%; 
+            transition: 0.4s;
+        }
+        .img-container:hover img { transform: scale(1.05); }
+
+        .cert-details { padding: 20px; background: #111827; border-top: 1px solid #1f2937; }
+        .cert-details h4 { color: #22d3ee; margin-bottom: 5px; }
+        .cert-details p { color: #9ca3af; font-size: 0.9rem; }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 200px; /* Centered on image height */
+            transform: translateY(-50%);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #22d3ee;
+            background: rgba(3, 7, 18, 0.8);
+            border: 1px solid #1f2937;
+            border-radius: 50%;
+            z-index: 10;
+            transition: 0.3s;
+        }
+        .prev { left: 15px; }
+        .next { right: 15px; }
+        .prev:hover, .next:hover { background: #22d3ee; color: #030712; }
+
+        .dot-container { text-align: center; padding: 15px; background: #111827; }
+        .dot {
+            cursor: pointer; height: 10px; width: 10px; margin: 0 5px;
+            background: #374151; border-radius: 50%; display: inline-block;
+            transition: 0.3s;
+        }
+        .dot.active { background: #22d3ee; transform: scale(1.2); }
+
+        /* Modal Pop-up */
+        .modal {
+            display: none; position: fixed; z-index: 1000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); justify-content: center; align-items: center;
+        }
+        .modal-content { 
+            max-width: 90%; 
+            max-height: 85%; 
+            border: 2px solid #22d3ee;
+            border-radius: 8px;
+            animation: zoomIn 0.3s ease;
+        }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; cursor: pointer; }
+
+        @media (max-width: 600px) {
+            .img-container { height: 250px; }
+            .prev, .next { top: 125px; width: 35px; height: 35px; }
+            .modal-content { max-width: 95%; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="resume.html">Resume</a></li>
+                <li><a href="projects.html" class="active">Projects</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <h1>Projects & <span>Credentials</span></h1>
+
+        <h2>My Works</h2>
+        <div class="work-grid">
+            <div class="work-card">
+                <div>
+                    <h3>Capstone Project Google Site Portfolio</h3>
+                    <p>Digital repository for academic projects and technical documentations.</p>
+                </div>
+                <a href="https://sites.google.com/view/loyalsprinting/home?authuser=0" target="_blank" class="site-link">
+                    Visit Site <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+            <div class="work-card">
+                <div>
+                    <h3>Virtual CV</h3>
+                    <p>A virtual CV is a digital, interactive resume designed for easy online sharing and engagement.</p>
+                </div>
+                <a href="#" class="site-link">Open Project <i class="fas fa-external-link-alt"></i></a>
+            </div>
+        </div>
+
+        <h2>Certificates</h2>
+        <div class="gallery-container">
+            <div class="cert-slide">
+                <div class="img-container" onclick="openModal('cert1.png')">
+                    <img src="cert1.png" alt="[ Sorsogon ] Create Digital Content- Communicate and Collaborate Online">
+                </div>
+                <div class="cert-details">
+                    <h4>[ Sorsogon ] Create Digital Content- Communicate and Collaborate Online 1</h4>
+                    <p>Learn to create digital documents and practice using collaborative tools to work effectively in hybrid and remote settings.</p>
+                </div>
+            </div>
+
+            <div class="cert-slide">
+                <div class="img-container" onclick="openModal('cert2.png')">
+                    <img src="cert2.png" alt="C++ Essentials 1 (Sorsogon)">
+                </div>
+                <div class="cert-details">
+                    <h4>C++ Essentials 1 (Sorsogon)</h4>
+                    <p>Build your C++ programming skills and prepare for CPE – C++ Certified Entry-Level Programmer certification.</p>
+                </div>
+            </div>
+
+            <div class="cert-slide">
+                <div class="img-container" onclick="openModal('cert3.png')">
+                    <img src="cert3.png" alt="[ Sorsogon ] JavaScript Essentials 1">
+                </div>
+                <div class="cert-details">
+                    <h4>[ Sorsogon ] JavaScript Essentials 1</h4>
+                    <p>Design, develop, and improve JavaScript programs. Boost your programming skills to start your career in technology.</p>
+                </div>
+            </div>
+
+            <div class="cert-slide">
+                <div class="img-container" onclick="openModal('cert4.png')">
+                    <img src="cert4.png" alt="JavaScript Essentials 2 [INTERNS]">
+                </div>
+                <div class="cert-details">
+                    <h4>JavaScript Essentials 2 [INTERNS]</h4>
+                    <p>The second in a 2-course series. Gain a strong JavaScript foundation and prepare for JSA – Certified Associate JavaScript Programmer Certification.</p>
+                </div>
+            </div>
+
+            <div class="cert-slide">
+                <div class="img-container" onclick="openModal('cert5.png')">
+                    <img src="cert5.png" alt="[ Sorsogon ] Python Essentials 1">
+                </div>
+                <div class="cert-details">
+                    <h4>[ Sorsogon ] Python Essentials 1</h4>
+                    <p>Learn fundamental concepts of computer programming and start building coding skills with the Python programming language.</p>
+                </div>
+            </div>
+
+            <div class="cert-slide">
+                <div class="img-container" onclick="openModal('cert6.png')">
+                    <img src="cert6.png" alt="[ Sorsogon ] Python Essentials 2 (In-house)">
+                </div>
+                <div class="cert-details">
+                    <h4>[ Sorsogon ] Python Essentials 2 (In-house)</h4>
+                    <p>Expand your computer programming skills and get ready to earn a certification.</p>
+                </div>
+            </div>
+
+            <a class="prev" onclick="plusSlides(-1)"><i class="fas fa-chevron-left"></i></a>
+            <a class="next" onclick="plusSlides(1)"><i class="fas fa-chevron-right"></i></a>
+
+            <div class="dot-container">
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+                <span class="dot" onclick="currentSlide(5)"></span>
+                <span class="dot" onclick="currentSlide(6)"></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="certModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) { showSlides(slideIndex += n); }
+        function currentSlide(n) { showSlides(slideIndex = n); }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("cert-slide");
+            let dots = document.getElementsByClassName("dot");
+            if (n > slides.length) {slideIndex = 1}    
+            if (n < 1) {slideIndex = slides.length}
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex-1].style.display = "block";  
+            dots[slideIndex-1].className += " active";
+        }
+
+        function openModal(src) {
+            document.getElementById("certModal").style.display = "flex";
+            document.getElementById("modalImg").src = src;
+        }
+        function closeModal() {
+            document.getElementById("certModal").style.display = "none";
+        }
+        
+        window.onclick = function(e) {
+            if (e.target.className === 'modal') closeModal();
+        }
+    </script>
+</body>
+</html>
